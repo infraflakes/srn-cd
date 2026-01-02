@@ -72,7 +72,7 @@ func SaveAliases(aliases map[string]string) error {
 
 	writer := bufio.NewWriter(file)
 	for alias, p := range aliases {
-		_, err := writer.WriteString(fmt.Sprintf("%s = %s\n", alias, p))
+		_, err := fmt.Fprintf(writer, "%s = %s\n", alias, p)
 		if err != nil {
 			return err
 		}
