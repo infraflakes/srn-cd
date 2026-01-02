@@ -41,14 +41,42 @@ var aliasListCmd = cli.NewCommand(
 		aliases, err := pkg.ReadAliases()
 		utils.CheckErr(err)
 
+		if len(aliases) == 0 {
+			fmt.Fprintln(os.Stderr, "No aliases configured.")
+			return
+		}
+
 		for k, v := range aliases {
 			fmt.Printf("%s = %s\n", k, v)
 		}
 	},
 )
 
+var aliasDeleteCmd = cli.NewCommand(
+	"delete [name]",
+	"Delete an alias",
+	cobra.ExactArgs(1),
+	func(cmd *cobra.Command, args []string) {
+		name := args[0]
+		utils.CheckErr(pkg.RemoveAlias(name))
+		fmt.Fprintf(os.Stderr, "Deleted alias: %s\n", name)
+	},
+)
+
+var aliasWipeCmd = cli.NewCommand(
+	"wipe",
+	"Wipe all aliases",
+	cobra.NoArgs,
+	func(cmd *cobra.Command, args []string) {
+		utils.CheckErr(pkg.WipeAliases())
+		fmt.Fprintln(os.Stderr, "All aliases wiped.")
+	},
+)
+
 func init() {
 	aliasCmd.AddCommand(aliasAddCmd)
 	aliasCmd.AddCommand(aliasListCmd)
+	aliasCmd.AddCommand(aliasDeleteCmd)
+	aliasCmd.AddCommand(aliasWipeCmd)
 	RootCmd.AddCommand(aliasCmd)
 }

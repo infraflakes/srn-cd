@@ -90,6 +90,24 @@ func AddAlias(alias string, path string) error {
 	return SaveAliases(aliases)
 }
 
+// RemoveAlias deletes the alias with the given name from the configuration.
+func RemoveAlias(alias string) error {
+	aliases, err := ReadAliases()
+	if err != nil {
+		return err
+	}
+	if _, ok := aliases[alias]; !ok {
+		return fmt.Errorf("alias '%s' not found!", alias)
+	}
+	delete(aliases, alias)
+	return SaveAliases(aliases)
+}
+
+// WipeAliases clears all saved aliases from the configuration.
+func WipeAliases() error {
+	return SaveAliases(make(map[string]string))
+}
+
 // FindPathByAlias looks up a target path associated with the given alias name.
 func FindPathByAlias(alias string) (string, bool) {
 	aliases, err := ReadAliases()
@@ -99,6 +117,8 @@ func FindPathByAlias(alias string) (string, bool) {
 	path, ok := aliases[alias]
 	return path, ok
 }
+
+
 
 // Priority resolves the target directory using a two-step approach:
 // 1. Checks if the target is an existing directory path (absolute or relative).

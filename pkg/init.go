@@ -18,7 +18,7 @@ func GenerateInit(shellName string) (string, error) {
     if test $status -eq 0; and test -d "$target"
         cd "$target"
     else if test -n "$target"
-        echo "$target"
+        printf "%%s\n" $target
     end
 end`, exe), nil
 	case "bash", "zsh":
