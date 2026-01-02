@@ -97,7 +97,7 @@ func RemoveAlias(alias string) error {
 		return err
 	}
 	if _, ok := aliases[alias]; !ok {
-		return fmt.Errorf("alias '%s' not found!", alias)
+		return fmt.Errorf("alias '%s' not found", alias)
 	}
 	delete(aliases, alias)
 	return SaveAliases(aliases)
@@ -106,6 +106,24 @@ func RemoveAlias(alias string) error {
 // WipeAliases clears all saved aliases from the configuration.
 func WipeAliases() error {
 	return SaveAliases(make(map[string]string))
+}
+
+// ExportAliases exports the aliases config to current directory
+func ExportAliases(destPath string) error {
+	configPath, err := GetConfigPath()
+	if err != nil {
+		return err
+	}
+
+	data, err := os.ReadFile(configPath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return fmt.Errorf("no aliases available to export")
+		}
+		return err
+	}
+
+	return os.WriteFile(destPath, data, 0755)
 }
 
 // FindPathByAlias looks up a target path associated with the given alias name.
@@ -117,8 +135,6 @@ func FindPathByAlias(alias string) (string, bool) {
 	path, ok := aliases[alias]
 	return path, ok
 }
-
-
 
 // Priority resolves the target directory using a two-step approach:
 // 1. Checks if the target is an existing directory path (absolute or relative).

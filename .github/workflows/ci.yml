@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v27
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+            experimental-features = nix-command flakes
+
+      - name: Format Go code
+        run: nix develop --command go fmt ./...
+
+      - name: Run golangci-lint
+        run: nix develop --command golangci-lint run ./...
+
+      - name: Flake health check
+        run: nix flake check
+
+      - name: Building Nix Package
+        run: nix build .#default

@@ -12,7 +12,7 @@ import (
 
 var RootCmd = cli.NewCommand(
 	"scd [alias]",
-	"Serein CD - switch directories using aliases",
+	"Serein CD - switch directories using aliases and TUI",
 	cobra.MaximumNArgs(1),
 	func(cmd *cobra.Command, args []string) {
 		var target string

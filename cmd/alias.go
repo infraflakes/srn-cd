@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/infraflakes/srn-cd/pkg"
 	"github.com/infraflakes/srn-libs/cli"
@@ -52,6 +53,20 @@ var aliasListCmd = cli.NewCommand(
 	},
 )
 
+var aliasExportCmd = cli.NewCommand(
+	"export",
+	"Export aliases to the current directory",
+	cobra.NoArgs,
+	func(cmd *cobra.Command, args []string) {
+		cwd, err := os.Getwd()
+		utils.CheckErr(err)
+
+		dest := filepath.Join(cwd, pkg.ConfigFileName)
+		utils.CheckErr(pkg.ExportAliases(dest))
+		fmt.Fprintf(os.Stderr, "Exported aliases to: %s\n", dest)
+	},
+)
+
 var aliasDeleteCmd = cli.NewCommand(
 	"delete [name]",
 	"Delete an alias",
@@ -78,5 +93,6 @@ func init() {
 	aliasCmd.AddCommand(aliasListCmd)
 	aliasCmd.AddCommand(aliasDeleteCmd)
 	aliasCmd.AddCommand(aliasWipeCmd)
+	aliasCmd.AddCommand(aliasExportCmd)
 	RootCmd.AddCommand(aliasCmd)
 }
