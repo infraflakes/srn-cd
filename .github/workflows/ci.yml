@@ -2,7 +2,23 @@ name: CI
 
 on:
   push:
+    paths:
+      - '**.go'
+      - '**.nix'
+      - '**.yml'
+      - '**.yaml'
+      - 'Makefile'
+      - 'go.mod'
+      - 'go.sum'
   pull_request:
+    paths:
+      - '**.go'
+      - '**.nix'
+      - '**.yml'
+      - '**.yaml'
+      - 'Makefile'
+      - 'go.mod'
+      - 'go.sum'
 
 jobs:
   build:

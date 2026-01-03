@@ -1,6 +1,6 @@
 # .goreleaser.yaml
 project_name: srn-cd
-
+version: 2
 builds:
   - id: scd
     main: ./

@@ -23,6 +23,9 @@
           pkgs.buildGoModule {
             pname = "scd";
             inherit version src;
+            preBuild = ''
+              export CGO_ENABLED=0
+            '';
             vendorHash = "sha256-NgIc1yRVP74hyE/Bfsr+Cl3MRgylgO+CzTdWRjjRGEg="; # Update if source changes
             ldflags = [
               "-s"
