@@ -17,9 +17,12 @@ var RootCmd = cli.NewCommand(
 	func(cmd *cobra.Command, args []string) {
 		var target string
 		if len(args) == 0 {
-			home, err := os.UserHomeDir()
+			selected, err := pkg.RunTUI()
 			utils.CheckErr(err)
-			target = home
+			if selected == "" {
+				os.Exit(0)
+			}
+			target = selected
 		} else {
 			target = args[0]
 		}
