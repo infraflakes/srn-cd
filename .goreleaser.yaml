@@ -1,0 +1,21 @@
+# .goreleaser.yaml
+project_name: srn-coreutils
+
+builds:
+  - id: scd
+    main: ./
+    binary: scd
+    ldflags:
+      - -s -w -X main.version={{.Version}}
+    goos:
+      - linux
+    goarch:
+      - amd64
+
+checksum:
+  name_template: 'checksums.txt'
+
+release:
+  github:
+    owner: infraflakes
+    name: srn-coreutils
