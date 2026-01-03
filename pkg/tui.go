@@ -10,25 +10,27 @@ import (
 )
 
 var (
-	headerStyle = lipgloss.NewStyle().
+	renderer = lipgloss.NewRenderer(os.Stderr)
+
+	headerStyle = renderer.NewStyle().
 			Bold(true).
 			Foreground(lipgloss.Color("7")).
 			Background(lipgloss.Color("5")).
 			Padding(0, 1)
 
-	selectedStyle = lipgloss.NewStyle().
+	selectedStyle = renderer.NewStyle().
 			Foreground(lipgloss.Color("2")).
 			Bold(true)
 
-	dimStyle = lipgloss.NewStyle().
+	dimStyle = renderer.NewStyle().
 			Foreground(lipgloss.Color("8"))
 
-	columnStyle = lipgloss.NewStyle().
+	columnStyle = renderer.NewStyle().
 			Border(lipgloss.NormalBorder(), false, true, false, false).
 			BorderForeground(lipgloss.Color("8")).
 			Padding(0, 1)
 
-	currentColumnStyle = lipgloss.NewStyle().
+	currentColumnStyle = renderer.NewStyle().
 				Border(lipgloss.NormalBorder(), false, true, false, true).
 				BorderForeground(lipgloss.Color("5")).
 				Padding(0, 1)
@@ -194,7 +196,7 @@ func (m *model) View() string {
 
 	parentCol := columnStyle.Width(colWidth).Height(m.height - 4).Render(m.renderColumn(m.parentEntries, -1, false))
 	currentCol := currentColumnStyle.Width(colWidth).Height(m.height - 4).Render(m.renderColumn(m.currentEntries, m.selectedIdx, true))
-	previewCol := lipgloss.NewStyle().Width(colWidth).Height(m.height - 4).Render(m.renderColumn(m.previewEntries, -1, false))
+	previewCol := renderer.NewStyle().Width(colWidth).Height(m.height - 4).Render(m.renderColumn(m.previewEntries, -1, false))
 
 	body := lipgloss.JoinHorizontal(lipgloss.Top, parentCol, currentCol, previewCol)
 
