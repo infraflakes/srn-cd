@@ -51,6 +51,7 @@ type model struct {
 	width, height  int
 	quitting       bool
 	finalPath      string
+	showFiles      bool
 }
 
 func (m *model) Init() tea.Cmd {
@@ -58,7 +59,7 @@ func (m *model) Init() tea.Cmd {
 }
 
 func (m *model) updateEntries() {
-	m.currentEntries = listEntries(m.currentDir)
+	m.currentEntries = listEntries(m.currentDir, m.showFiles)
 	if m.selectedIdx >= len(m.currentEntries) {
 		m.selectedIdx = 0
 	}
@@ -66,12 +67,12 @@ func (m *model) updateEntries() {
 		m.selectedIdx = 0
 	}
 
-	m.parentEntries = listEntries(filepath.Dir(m.currentDir))
+	m.parentEntries = listEntries(filepath.Dir(m.currentDir), m.showFiles)
 
 	if len(m.currentEntries) > 0 {
 		sel := m.currentEntries[m.selectedIdx]
 		if sel.isDir {
-			m.previewEntries = listEntries(sel.path)
+			m.previewEntries = listEntries(sel.path, m.showFiles)
 		} else {
 			m.previewEntries = nil
 		}
@@ -80,7 +81,7 @@ func (m *model) updateEntries() {
 	}
 }
 
-func listEntries(path string) []entry {
+func listEntries(path string, showFiles bool) []entry {
 	files, err := os.ReadDir(path)
 	if err != nil {
 		return nil
@@ -88,6 +89,9 @@ func listEntries(path string) []entry {
 
 	var entries []entry
 	for _, f := range files {
+		if !showFiles && !f.IsDir() {
+			continue
+		}
 		entries = append(entries, entry{
 			name:  f.Name(),
 			isDir: f.IsDir(),
@@ -104,6 +108,10 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "ctrl+c", "q":
 			m.quitting = true
 			return m, tea.Quit
+
+		case ".":
+			m.showFiles = !m.showFiles
+			m.updateEntries()
 
 		case "up", "k":
 			if m.selectedIdx > 0 {
@@ -145,8 +153,12 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		case "enter":
 			if len(m.currentEntries) > 0 {
-				m.finalPath = m.currentEntries[m.selectedIdx].path
-				return m, tea.Quit
+				sel := m.currentEntries[m.selectedIdx]
+				// Only allow selecting directories for cd
+				if sel.isDir {
+					m.finalPath = sel.path
+					return m, tea.Quit
+				}
 			}
 		}
 
@@ -200,13 +212,16 @@ func (m *model) View() string {
 
 	body := lipgloss.JoinHorizontal(lipgloss.Top, parentCol, currentCol, previewCol)
 
-	footer := dimStyle.Render(fmt.Sprintf("\n %d/%d entries | h/j/k/l: navigate | enter: select | q: quit", m.selectedIdx+1, len(m.currentEntries)))
+	filterStatus := " [DIRS]"
+	if m.showFiles {
+		filterStatus = " [ALL]"
+	}
+	footer := dimStyle.Render(fmt.Sprintf("\n %d/%d entries%s | .: toggle files | enter: select | q: quit", m.selectedIdx+1, len(m.currentEntries), filterStatus))
 
 	return lipgloss.JoinVertical(lipgloss.Left, header, body, footer)
 }
 
 // RunTUI starts the interactive directory browser.
-// It returns the selected path or an empty string if cancelled.
 func RunTUI() (string, error) {
 	cwd, err := os.Getwd()
 	if err != nil {
