@@ -203,6 +203,8 @@ func (m *model) View() string {
 	return lipgloss.JoinVertical(lipgloss.Left, header, body, footer)
 }
 
+// RunTUI starts the interactive directory browser.
+// It returns the selected path or an empty string if cancelled.
 func RunTUI() (string, error) {
 	cwd, err := os.Getwd()
 	if err != nil {
@@ -214,7 +216,9 @@ func RunTUI() (string, error) {
 	}
 	m.updateEntries()
 
-	p := tea.NewProgram(m, tea.WithAltScreen())
+	// Use os.Stderr for the UI so the shell function doesn't capture it.
+	// reserves stdout exclusively for the final selected path.
+	p := tea.NewProgram(m, tea.WithAltScreen(), tea.WithOutput(os.Stderr))
 	finalModel, err := p.Run()
 	if err != nil {
 		return "", err
