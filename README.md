@@ -4,17 +4,6 @@ Serein is a supercharged cd wrapper with aliases and TUI.
 
 ## Installation
 
-### Quick Try (Run without Installation)
-
-If you want to quickly try it without installing it permanently:
-
-1.  **Ensure Nix is installed** on your system with flake support enabled.
-2.  **Run the CLI directly from GitHub:**
-    You can run the stable build:
-    ```bash
-    nix run github:infraflakes/srn-cd -- [args]
-    ```
-
 ### For NixOS/Home Manager Configurations
 
 If you manage your system or user environment with NixOS or Home Manager flakes, you can add `srn-cd` as an input to your configuration.
@@ -97,6 +86,24 @@ For users not using Nix, the CLI can be downloaded as a single executable binary
     sudo mv scd /usr/local/bin/
     ```
 
+4. **Generate shell functions for the cli to work:**
+    Add these to your shell config:
+
+    Bash:
+    ```
+    eval "$(scd init bash)"
+    ```
+
+    Zsh:
+    ```
+    eval "$(scd init zsh)"
+    ```
+
+    Fish:
+    ```
+    scd init fish | source
+    ```
+
 ### Manual Installation (from source)
 
 If you have a Go environment set up, you can build from source.
@@ -114,7 +121,7 @@ If you have a Go environment set up, you can build from source.
     ```
     Alternatively, you can use the standard Go command:
     ```bash
-    go build -o scd .
+    CGO_ENABLED=0 go build -o scd .
     ```
 
 ## Contributing
