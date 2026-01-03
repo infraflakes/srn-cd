@@ -1,10 +1,12 @@
 # .goreleaser.yaml
-project_name: srn-coreutils
+project_name: srn-cd
 
 builds:
   - id: scd
     main: ./
     binary: scd
+    env:
+      - CGO_ENABLED=0
     ldflags:
       - -s -w -X main.version={{.Version}}
     goos:

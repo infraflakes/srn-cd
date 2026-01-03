@@ -25,7 +25,7 @@ all: build
 
 build:
 	@echo "Building $(BINARY_NAME) version $(VERSION)..."
-	$(GO_BUILD) $(LDFLAGS) -o $(BINARY_NAME) .
+	CGO_ENABLED=0 $(GO_BUILD) $(LDFLAGS) -o $(BINARY_NAME) .
 
 run:
 	$(GO_RUN) . --

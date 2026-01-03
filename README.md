@@ -14,7 +14,6 @@ If you want to quickly try it without installing it permanently:
     ```bash
     nix run github:infraflakes/srn-cd -- [args]
     ```
-    (Replace `[args]` with any command and its arguments, e.g., `nix run github:infraflakes/srn-cd -- music convert mp3 /path/to/dir`)
 
 ### For NixOS/Home Manager Configurations
 
