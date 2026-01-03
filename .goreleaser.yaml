@@ -18,4 +18,4 @@ checksum:
 release:
   github:
     owner: infraflakes
-    name: srn-coreutils
+    name: srn-cd

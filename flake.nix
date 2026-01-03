@@ -23,7 +23,7 @@
           pkgs.buildGoModule {
             pname = "scd";
             inherit version src;
-            vendorHash = "sha256-pIup/7lP0rOeCJBDrrXKVPRy9fXS9+1TpUCg3tq+Kgg="; # Update if source changes
+            vendorHash = "sha256-NgIc1yRVP74hyE/Bfsr+Cl3MRgylgO+CzTdWRjjRGEg="; # Update if source changes
             ldflags = [
               "-s"
               "-w"
