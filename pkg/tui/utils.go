@@ -15,7 +15,12 @@ func (m *model) updateEntries() {
 		m.selectedIdx = 0
 	}
 
-	m.parentEntries = listEntries(filepath.Dir(m.currentDir), m.showFiles)
+	parentDir := filepath.Dir(m.currentDir)
+	if parentDir == m.currentDir {
+		m.parentEntries = nil
+	} else {
+		m.parentEntries = listEntries(parentDir, m.showFiles)
+	}
 
 	if len(m.currentEntries) > 0 {
 		sel := m.currentEntries[m.selectedIdx]

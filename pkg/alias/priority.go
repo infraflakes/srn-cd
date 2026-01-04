@@ -15,7 +15,7 @@ func FindPathByAlias(target string) (string, bool) {
 	return path, ok
 }
 
-// Priority resolves the target directory using a two-step approach:
+// Prioritizes target directory using a two-step approach:
 // 1. Checks if the target is an existing directory path (absolute or relative).
 // 2. Checks if the target matches a predefined alias in the configuration.
 func Priority(target string) (string, error) {

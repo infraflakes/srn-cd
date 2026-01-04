@@ -12,7 +12,6 @@ import (
 
 const ConfigFileName = "scd-alias.conf"
 
-// getConfigPath returns the absolute path to ~/.config/scd/scd-alias.conf
 func getConfigPath() (string, error) {
 	configDir, err := os.UserConfigDir()
 	if err != nil {
