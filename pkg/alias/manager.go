@@ -1,4 +1,4 @@
-package pkg
+package alias
 
 import (
 	"bufio"
@@ -12,23 +12,22 @@ import (
 
 const ConfigFileName = "scd-alias.conf"
 
-// GetConfigPath returns the absolute path to the scd configuration file (~/.config/scd/scd-alias.conf).
-func GetConfigPath() (string, error) {
+// getConfigPath returns the absolute path to ~/.config/scd/scd-alias.conf
+func getConfigPath() (string, error) {
 	configDir, err := os.UserConfigDir()
 	if err != nil {
 		return "", err
 	}
-	scdDir := filepath.Join(configDir, "scd")
-	if err := os.MkdirAll(scdDir, 0755); err != nil {
+	path := filepath.Join(configDir, "scd", "scd-alias.conf")
+	if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
 		return "", err
 	}
-	return filepath.Join(scdDir, ConfigFileName), nil
+	return path, nil
 }
 
 // ReadAliases parses the configuration file and returns a map of alias names to their target paths.
-// If the config file does not exist, it returns an empty map and no error.
 func ReadAliases() (map[string]string, error) {
-	path, err := GetConfigPath()
+	path, err := getConfigPath()
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +58,7 @@ func ReadAliases() (map[string]string, error) {
 
 // SaveAliases writes the given map of aliases back to the configuration file.
 func SaveAliases(aliases map[string]string) error {
-	path, err := GetConfigPath()
+	path, err := getConfigPath()
 	if err != nil {
 		return err
 	}
@@ -110,7 +109,7 @@ func WipeAliases() error {
 
 // ExportAliases exports the aliases config to current directory
 func ExportAliases(destPath string) error {
-	configPath, err := GetConfigPath()
+	configPath, err := getConfigPath()
 	if err != nil {
 		return err
 	}
@@ -124,31 +123,4 @@ func ExportAliases(destPath string) error {
 	}
 
 	return os.WriteFile(destPath, data, 0755)
-}
-
-// FindPathByAlias looks up a target path associated with the given alias name.
-func FindPathByAlias(alias string) (string, bool) {
-	aliases, err := ReadAliases()
-	if err != nil {
-		return "", false
-	}
-	path, ok := aliases[alias]
-	return path, ok
-}
-
-// Priority resolves the target directory using a two-step approach:
-// 1. Checks if the target is an existing directory path (absolute or relative).
-// 2. Checks if the target matches a predefined alias in the configuration.
-func Priority(target string) (string, error) {
-	// Priority 1: Check if it's an existing directory (absolute or relative)
-	if info, err := os.Stat(target); err == nil && info.IsDir() {
-		return filepath.Abs(target)
-	}
-
-	// Priority 2: Alias resolution
-	if path, ok := FindPathByAlias(target); ok {
-		return path, nil
-	}
-
-	return "", os.ErrNotExist
 }

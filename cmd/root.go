@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/infraflakes/srn-cd/pkg"
+	"github.com/infraflakes/srn-cd/pkg/alias"
 	"github.com/infraflakes/srn-cd/pkg/tui"
 	"github.com/infraflakes/srn-libs/cli"
 	"github.com/infraflakes/srn-libs/utils"
@@ -28,7 +28,7 @@ var RootCmd = cli.NewCommand(
 			target = args[0]
 		}
 
-		path, err := pkg.Priority(target)
+		path, err := alias.Priority(target)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error: '%s' is not a valid path or alias\n", target)
 			os.Exit(1)

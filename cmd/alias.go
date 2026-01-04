@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/infraflakes/srn-cd/pkg"
+	"github.com/infraflakes/srn-cd/pkg/alias"
 	"github.com/infraflakes/srn-libs/cli"
 	"github.com/infraflakes/srn-libs/utils"
 	"github.com/spf13/cobra"
@@ -29,7 +29,7 @@ var aliasAddCmd = cli.NewCommand(
 		cwd, err := os.Getwd()
 		utils.CheckErr(err)
 
-		utils.CheckErr(pkg.AddAlias(name, cwd))
+		utils.CheckErr(alias.AddAlias(name, cwd))
 		fmt.Fprintf(os.Stderr, "Added alias: %s -> %s\n", name, cwd)
 	},
 )
@@ -39,7 +39,7 @@ var aliasListCmd = cli.NewCommand(
 	"List all aliases",
 	cobra.NoArgs,
 	func(cmd *cobra.Command, args []string) {
-		aliases, err := pkg.ReadAliases()
+		aliases, err := alias.ReadAliases()
 		utils.CheckErr(err)
 
 		if len(aliases) == 0 {
@@ -61,8 +61,8 @@ var aliasExportCmd = cli.NewCommand(
 		cwd, err := os.Getwd()
 		utils.CheckErr(err)
 
-		dest := filepath.Join(cwd, pkg.ConfigFileName)
-		utils.CheckErr(pkg.ExportAliases(dest))
+		dest := filepath.Join(cwd, alias.ConfigFileName)
+		utils.CheckErr(alias.ExportAliases(dest))
 		fmt.Fprintf(os.Stderr, "Exported aliases to: %s\n", dest)
 	},
 )
@@ -73,7 +73,7 @@ var aliasDeleteCmd = cli.NewCommand(
 	cobra.ExactArgs(1),
 	func(cmd *cobra.Command, args []string) {
 		name := args[0]
-		utils.CheckErr(pkg.RemoveAlias(name))
+		utils.CheckErr(alias.RemoveAlias(name))
 		fmt.Fprintf(os.Stderr, "Deleted alias: %s\n", name)
 	},
 )
@@ -83,7 +83,7 @@ var aliasWipeCmd = cli.NewCommand(
 	"Wipe all aliases",
 	cobra.NoArgs,
 	func(cmd *cobra.Command, args []string) {
-		utils.CheckErr(pkg.WipeAliases())
+		utils.CheckErr(alias.WipeAliases())
 		fmt.Fprintln(os.Stderr, "All aliases wiped.")
 	},
 )
