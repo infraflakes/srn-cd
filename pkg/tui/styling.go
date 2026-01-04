@@ -13,13 +13,13 @@ var (
 	// HeaderStyle is used for the current directory path at the top.
 	HeaderStyle = Renderer.NewStyle().
 			Bold(true).
-			Foreground(lipgloss.Color("7")).
-			Background(lipgloss.Color("5")).
+			Foreground(lipgloss.Color("0")).
+			Background(lipgloss.Color("4")).
 			Padding(0, 1)
 
 	// SelectedStyle is used for the currently highlighted item in the active column.
 	SelectedStyle = Renderer.NewStyle().
-			Foreground(lipgloss.Color("2")).
+			Foreground(lipgloss.Color("4")).
 			Bold(true)
 
 	// DimStyle is used for non-active columns and footer hints.
@@ -35,6 +35,6 @@ var (
 	// CurrentColumnStyle defines the highlighted border for the active navigation column.
 	CurrentColumnStyle = Renderer.NewStyle().
 				Border(lipgloss.NormalBorder(), false, true, false, true).
-				BorderForeground(lipgloss.Color("5")).
+				BorderForeground(lipgloss.Color("4")).
 				Padding(0, 1)
 )
