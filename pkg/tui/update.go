@@ -16,6 +16,10 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 
 		case ".":
+			m.showHidden = !m.showHidden
+			m.updateEntries()
+
+		case "backspace":
 			m.showFiles = !m.showFiles
 			m.updateEntries()
 

@@ -3,11 +3,12 @@ package tui
 import (
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 // updateEntries refreshes parent, current, and preview entry lists based on the current state.
 func (m *model) updateEntries() {
-	m.currentEntries = listEntries(m.currentDir, m.showFiles)
+	m.currentEntries = listEntries(m.currentDir, m.showFiles, m.showHidden)
 	if m.selectedIdx >= len(m.currentEntries) {
 		m.selectedIdx = 0
 	}
@@ -19,13 +20,13 @@ func (m *model) updateEntries() {
 	if parentDir == m.currentDir {
 		m.parentEntries = nil
 	} else {
-		m.parentEntries = listEntries(parentDir, m.showFiles)
+		m.parentEntries = listEntries(parentDir, m.showFiles, m.showHidden)
 	}
 
 	if len(m.currentEntries) > 0 {
 		sel := m.currentEntries[m.selectedIdx]
 		if sel.isDir {
-			m.previewEntries = listEntries(sel.path, m.showFiles)
+			m.previewEntries = listEntries(sel.path, m.showFiles, m.showHidden)
 		} else {
 			m.previewEntries = nil
 		}
@@ -35,7 +36,7 @@ func (m *model) updateEntries() {
 }
 
 // listEntries reads a directory and returns a sorted list of entries.
-func listEntries(path string, showFiles bool) []entry {
+func listEntries(path string, showFiles, showHidden bool) []entry {
 	files, err := os.ReadDir(path)
 	if err != nil {
 		return nil
@@ -43,14 +44,21 @@ func listEntries(path string, showFiles bool) []entry {
 
 	var entries []entry
 	for _, f := range files {
+		name := f.Name()
+
+		// Filter out dotfiles if showHidden is false
+		if !showHidden && strings.HasPrefix(name, ".") {
+			continue
+		}
+
 		// Filter out files if showFiles is false
 		if !showFiles && !f.IsDir() {
 			continue
 		}
 		entries = append(entries, entry{
-			name:  f.Name(),
+			name:  name,
 			isDir: f.IsDir(),
-			path:  filepath.Join(path, f.Name()),
+			path:  filepath.Join(path, name),
 		})
 	}
 	return entries

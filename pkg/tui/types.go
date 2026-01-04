@@ -18,4 +18,5 @@ type model struct {
 	quitting       bool    // Whether the user is exiting the TUI
 	finalPath      string  // The path selected to be returned to the shell
 	showFiles      bool    // Whether to show regular files (dirs only by default)
+	showHidden     bool    // Whether to show hidden files/directories (false by default)
 }

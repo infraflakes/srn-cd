@@ -23,11 +23,15 @@ func (m *model) View() string {
 
 	body := lipgloss.JoinHorizontal(lipgloss.Top, parentCol, currentCol, previewCol)
 
-	filterStatus := " [DIRS]"
+	fileStatus := " [DIRS]"
 	if m.showFiles {
-		filterStatus = " [ALL]"
+		fileStatus = " [ALL]"
 	}
-	footer := DimStyle.Render(fmt.Sprintf("\n %d/%d entries%s | .: toggle files | enter: select | q: quit", m.selectedIdx+1, len(m.currentEntries), filterStatus))
+	dotStatus := ""
+	if m.showHidden {
+		dotStatus = " [DOT]"
+	}
+	footer := DimStyle.Render(fmt.Sprintf("\n %d/%d entries%s%s | backspace: files | .: hidden | q: quit", m.selectedIdx+1, len(m.currentEntries), fileStatus, dotStatus))
 
 	return lipgloss.JoinVertical(lipgloss.Left, header, body, footer)
 }
