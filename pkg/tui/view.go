@@ -32,7 +32,11 @@ func (m *model) View() string {
 		dotStatus = " [DOTS]"
 	}
 
-	help := BrightStyle.Render(" backspace: files | .: hidden | q: quit")
+	help := lipgloss.JoinHorizontal(lipgloss.Top,
+		KeyStyle.Render(" ."), BrightStyle.Render(" toggle hidden "),
+		KeyStyle.Render(" ⌫"), BrightStyle.Render(" toggle files "),
+		KeyStyle.Render(" q"), BrightStyle.Render(" quit"),
+	)
 	status := BrightStyle.Render(fmt.Sprintf("%d/%d%s%s ", m.selectedIdx+1, len(m.currentEntries), fileStatus, dotStatus))
 
 	// Calculate space for the gap between left and right footer elements

@@ -31,6 +31,11 @@ var (
 	BrightStyle = Renderer.NewStyle().
 			Foreground(lipgloss.Color("7"))
 
+	// KeyStyle is used for the key characters in help hints.
+	KeyStyle = Renderer.NewStyle().
+			Foreground(lipgloss.Color("9")).
+			Bold(true)
+
 	// ColumnStyle defines the border and padding for parent and preview columns.
 	ColumnStyle = Renderer.NewStyle().
 			Border(lipgloss.NormalBorder(), false, true, false, false).
