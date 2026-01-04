@@ -4,6 +4,29 @@ Serein is a supercharged cd wrapper with aliases and TUI.
 
 ## Installation
 
+### Caution!
+
+In order for `scd` to change directory we need to generate shell functions for it:  
+Add these to your shell config:
+
+Bash:
+
+```bash
+eval "$(scd init bash)"
+```
+
+Zsh:
+
+```zsh
+eval "$(scd init zsh)"
+```
+
+Fish:
+
+```fish
+scd init fish | source
+```
+
 ### For NixOS/Home Manager Configurations
 
 If you manage your system or user environment with NixOS or Home Manager flakes, you can add `srn-cd` as an input to your configuration.
@@ -105,23 +128,6 @@ If you have a Go environment set up, you can build from source.
     ```bash
     CGO_ENABLED=0 go build -o scd .
     ```
-
-#### Caution!
-
-**In order for `scd` to work we need to generate shell functions for it to able to change directory:**
-Add these to your shell config:
-
-Bash:
-
-    eval "$(scd init bash)"
-
-Zsh:
-
-    eval "$(scd init zsh)"
-
-Fish:
-
-    scd init fish | source
 
 ## Contributing
 
