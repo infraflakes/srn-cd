@@ -86,24 +86,6 @@ For users not using Nix, the CLI can be downloaded as a single executable binary
     sudo mv scd /usr/local/bin/
     ```
 
-4. **Generate shell functions for the cli to work:**
-    Add these to your shell config:
-
-    Bash:
-    ```
-    eval "$(scd init bash)"
-    ```
-
-    Zsh:
-    ```
-    eval "$(scd init zsh)"
-    ```
-
-    Fish:
-    ```
-    scd init fish | source
-    ```
-
 ### Manual Installation (from source)
 
 If you have a Go environment set up, you can build from source.
@@ -122,6 +104,26 @@ If you have a Go environment set up, you can build from source.
     Alternatively, you can use the standard Go command:
     ```bash
     CGO_ENABLED=0 go build -o scd .
+    ```
+
+#### Caution!
+
+**In order for `scd` to work we need to generate shell functions for it to able to change directory:**
+    Add these to your shell config:
+
+    Bash:
+    ```
+    eval "$(scd init bash)"
+    ```
+
+    Zsh:
+    ```
+    eval "$(scd init zsh)"
+    ```
+
+    Fish:
+    ```
+    scd init fish | source
     ```
 
 ## Contributing
