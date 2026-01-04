@@ -17,9 +17,9 @@ func (m *model) View() string {
 	colWidth := (m.width - 6) / 3
 
 	// Render the three columns: Parent, Current (active), and Preview
-	parentCol := ColumnStyle.Width(colWidth).Height(m.height - 4).Render(m.renderColumn(m.parentEntries, -1, false))
-	currentCol := CurrentColumnStyle.Width(colWidth).Height(m.height - 4).Render(m.renderColumn(m.currentEntries, m.selectedIdx, true))
-	previewCol := Renderer.NewStyle().Width(colWidth).Height(m.height - 4).Render(m.renderColumn(m.previewEntries, -1, false))
+	parentCol := ColumnStyle.Width(colWidth).Height(m.height - 4).Render(m.renderColumn(m.parentEntries, -1, false, colWidth-2))
+	currentCol := CurrentColumnStyle.Width(colWidth).Height(m.height - 4).Render(m.renderColumn(m.currentEntries, m.selectedIdx, true, colWidth-2))
+	previewCol := Renderer.NewStyle().Width(colWidth).Height(m.height - 4).Render(m.renderColumn(m.previewEntries, -1, false, colWidth-2))
 
 	body := lipgloss.JoinHorizontal(lipgloss.Top, parentCol, currentCol, previewCol)
 
@@ -33,7 +33,7 @@ func (m *model) View() string {
 }
 
 // renderColumn converts a list of entries into a formatted Lip Gloss string for a column.
-func (m *model) renderColumn(entries []entry, selectedIdx int, isActive bool) string {
+func (m *model) renderColumn(entries []entry, selectedIdx int, isActive bool, width int) string {
 	var s string
 	height := m.height - 4
 
@@ -50,7 +50,8 @@ func (m *model) renderColumn(entries []entry, selectedIdx int, isActive bool) st
 		}
 
 		if i == selectedIdx && isActive {
-			s += SelectedStyle.Render("> "+name) + "\n"
+			// Full line highlight: no arrow, padded to width
+			s += SelectedStyle.Width(width).Render(" "+name) + "\n"
 		} else if i == selectedIdx && !isActive {
 			s += DimStyle.Render("  "+name) + "\n"
 		} else {

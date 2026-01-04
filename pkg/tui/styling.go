@@ -19,7 +19,8 @@ var (
 
 	// SelectedStyle is used for the currently highlighted item in the active column.
 	SelectedStyle = Renderer.NewStyle().
-			Foreground(lipgloss.Color("4")).
+			Foreground(lipgloss.Color("0")).
+			Background(lipgloss.Color("4")).
 			Bold(true)
 
 	// DimStyle is used for non-active columns and footer hints.
