@@ -109,22 +109,19 @@ If you have a Go environment set up, you can build from source.
 #### Caution!
 
 **In order for `scd` to work we need to generate shell functions for it to able to change directory:**
-    Add these to your shell config:
+Add these to your shell config:
 
-    Bash:
-    ```
+Bash:
+
     eval "$(scd init bash)"
-    ```
 
-    Zsh:
-    ```
+Zsh:
+
     eval "$(scd init zsh)"
-    ```
 
-    Fish:
-    ```
+Fish:
+
     scd init fish | source
-    ```
 
 ## Contributing
 
