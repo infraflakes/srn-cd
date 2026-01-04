@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/infraflakes/srn-cd/pkg"
+	"github.com/infraflakes/srn-cd/pkg/tui"
 	"github.com/infraflakes/srn-libs/cli"
 	"github.com/infraflakes/srn-libs/utils"
 	"github.com/spf13/cobra"
@@ -17,7 +18,7 @@ var RootCmd = cli.NewCommand(
 	func(cmd *cobra.Command, args []string) {
 		var target string
 		if len(args) == 0 {
-			selected, err := pkg.RunTUI()
+			selected, err := tui.RunTUI()
 			utils.CheckErr(err)
 			if selected == "" {
 				os.Exit(0)
