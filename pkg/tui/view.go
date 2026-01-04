@@ -29,7 +29,7 @@ func (m *model) View() string {
 	}
 	dotStatus := ""
 	if m.showHidden {
-		dotStatus = " [DOT]"
+		dotStatus = " [DOTS]"
 	}
 
 	help := BrightStyle.Render(" backspace: files | .: hidden | q: quit")
