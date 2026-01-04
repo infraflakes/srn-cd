@@ -31,7 +31,18 @@ func (m *model) View() string {
 	if m.showHidden {
 		dotStatus = " [DOT]"
 	}
-	footer := DimStyle.Render(fmt.Sprintf("\n %d/%d entries%s%s | backspace: files | .: hidden | q: quit", m.selectedIdx+1, len(m.currentEntries), fileStatus, dotStatus))
+
+	help := BrightStyle.Render(" backspace: files | .: hidden | q: quit")
+	status := BrightStyle.Render(fmt.Sprintf("%d/%d%s%s ", m.selectedIdx+1, len(m.currentEntries), fileStatus, dotStatus))
+
+	// Calculate space for the gap between left and right footer elements
+	gapWidth := m.width - lipgloss.Width(help) - lipgloss.Width(status)
+	if gapWidth < 0 {
+		gapWidth = 0
+	}
+	gap := lipgloss.NewStyle().Width(gapWidth).Render("")
+
+	footer := "\n" + lipgloss.JoinHorizontal(lipgloss.Top, help, gap, status)
 
 	return lipgloss.JoinVertical(lipgloss.Left, header, body, footer)
 }

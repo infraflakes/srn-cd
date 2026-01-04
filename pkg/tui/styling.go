@@ -27,6 +27,10 @@ var (
 	DimStyle = Renderer.NewStyle().
 			Foreground(lipgloss.Color("8"))
 
+	// BrightStyle is used for non-active columns and footer hints.
+	BrightStyle = Renderer.NewStyle().
+			Foreground(lipgloss.Color("7"))
+
 	// ColumnStyle defines the border and padding for parent and preview columns.
 	ColumnStyle = Renderer.NewStyle().
 			Border(lipgloss.NormalBorder(), false, true, false, false).
